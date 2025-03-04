@@ -947,10 +947,8 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
       },
     );
 
-    if (selectedValue != null) {
-      setState(() {
-        _profileVisibility = selectedValue;
-      });
+    setState(() {
+      _profileVisibility = selectedValue ?? '';
+    });
     }
-  }
 }

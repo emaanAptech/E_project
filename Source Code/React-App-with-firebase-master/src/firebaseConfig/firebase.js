@@ -11,13 +11,13 @@ import { getFirestore } from 'firebase/firestore';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyD3e0fFZnRzrILIgLvX5Z8U6_2mcUAK7QE",
-  authDomain: "laptopharbor-97b44.firebaseapp.com",
-  projectId: "laptopharbor-97b44",
-  storageBucket: "laptopharbor-97b44.firebasestorage.app",
-  messagingSenderId: "484062572276",
-  appId: "1:484062572276:web:0da97ca9e0722d7ba6f8a1",
-  measurementId: "G-8Z8BJDG8GQ"
+  apiKey: "AIzaSyCtaTc_7V0EmRFlLCbL4Sh4RGYl9M7pr7M",
+  authDomain: "laptopharbor-9861c.firebaseapp.com",
+  projectId: "laptopharbor-9861c",
+  storageBucket: "laptopharbor-9861c.firebasestorage.app",
+  messagingSenderId: "282887394151",
+  appId: "1:282887394151:web:51633c1afa0004962e95c2",
+  measurementId: "G-3WS3X13KSJ"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

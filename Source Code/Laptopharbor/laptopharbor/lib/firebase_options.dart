@@ -47,29 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD3e0fFZnRzrILIgLvX5Z8U6_2mcUAK7QE',
-    appId: '1:484062572276:web:0da97ca9e0722d7ba6f8a1',
-    messagingSenderId: '484062572276',
-    projectId: 'laptopharbor-97b44',
-    authDomain: 'laptopharbor-97b44.firebaseapp.com',
-    storageBucket: 'laptopharbor-97b44.firebasestorage.app',
-    measurementId: 'G-8Z8BJDG8GQ',
+    apiKey: 'AIzaSyCtaTc_7V0EmRFlLCbL4Sh4RGYl9M7pr7M',
+    appId: '1:282887394151:web:51633c1afa0004962e95c2',
+    messagingSenderId: '282887394151',
+    projectId: 'laptopharbor-9861c',
+    authDomain: 'laptopharbor-9861c.firebaseapp.com',
+    storageBucket: 'laptopharbor-9861c.firebasestorage.app',
+    measurementId: 'G-3WS3X13KSJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD8Gc9KMwt6HK9sAmcQlurpgrsdB3PrOVE',
-    appId: '1:484062572276:android:d26a2ccac8720fd2a6f8a1',
-    messagingSenderId: '484062572276',
-    projectId: 'laptopharbor-97b44',
-    storageBucket: 'laptopharbor-97b44.firebasestorage.app',
+    apiKey: 'AIzaSyAdqb9xjb_l0l33jXrdkzVSFfEM3JLueG4',
+    appId: '1:282887394151:android:6a830113f6ba83db2e95c2',
+    messagingSenderId: '282887394151',
+    projectId: 'laptopharbor-9861c',
+    storageBucket: 'laptopharbor-9861c.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBS0zn_Ycm_wnCE8uAYxeVsDVg--TSlnos',
-    appId: '1:484062572276:ios:3e1106c64d5f056da6f8a1',
-    messagingSenderId: '484062572276',
-    projectId: 'laptopharbor-97b44',
-    storageBucket: 'laptopharbor-97b44.firebasestorage.app',
+    apiKey: 'AIzaSyDbdFORE4WORr6anHgKNMPMlrhC4Xt_7Yk',
+    appId: '1:282887394151:ios:7a82110baf7cac722e95c2',
+    messagingSenderId: '282887394151',
+    projectId: 'laptopharbor-9861c',
+    storageBucket: 'laptopharbor-9861c.firebasestorage.app',
     iosBundleId: 'com.example.laptopharbor',
   );
+
 }
