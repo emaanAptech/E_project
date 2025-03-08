@@ -1,0 +1,41 @@
+LaptopHarvor
+
+Functional Requirements:
+
+1 User Registration and Authentication (ok)
+2 Product Listings
+3 Product Details and Reviews
+4 Shopping Cart (ok)
+5 Checkout (ok)
+6 Order Tracking (ok)
+7 User Profile and Settings
+8 Search Functionality (
+9 Wish List (ok)
+10 Feedback and Support (ok)
+11 Filter and Sort (ok)
+
+Lenovo => (Lenovo 3i Chromebook (15” Intel) Laptop, 
+Lenovo Chromebook Duet 3 (11”), 
+Chromebook Duet Gen 9 (11″ MediaTek), 
+Lenovo Chromebook Duet 5 13”, 
+Lenovo Slim 7i (14” Intel) Laptop)
+
+HP => (Probook, Elite Book)
+
+Dell => (Xps 13, 
+Xps 14, 
+G series,
+Inspiron 15-3535)
+
+Apple => (MacBook Air,
+ MacBook Pro)
+
+Asus => (ASUS Vivobook S 14 Flip (TP3402),
+Vivobook Go 14 (L410),
+ASUS Vivobook Pro 15 OLED (Q543),
+ASUS Vivobook Pro 15 OLED (Q533))
+
+Acer => (Acer Aspire,
+Acer Aspire One,
+Aspire Intel,
+Aspire Spin 14)
