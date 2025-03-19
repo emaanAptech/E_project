@@ -188,13 +188,14 @@ const Dashboard = () => {
           <CRow>
             <CCol md={2}></CCol>
             <CCol md>
-
       <WidgetsDropdown className="mb-4" />
       <WidgetsBrand className="mb-4" withCharts />
       </CCol>
       </CRow>
       </CCardBody>
       </CCard>
+
+
       {/* <CCard className="mb-4">
         <CCardBody>
           <CRow>
