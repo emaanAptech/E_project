@@ -23,16 +23,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-      
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              "images/background.jpg", // Replace with your image path
-              fit: BoxFit.cover,
-            ),
+
+      body: Stack(children: [
+        // Background Image
+        Positioned.fill(
+          child: Image.asset(
+            "images/background.jpg", // Replace with your image path
+            fit: BoxFit.cover,
           ),
+        ),
         Center(
           child: SizedBox(
             width: 350,
@@ -64,10 +63,12 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   "LOGIN!",
                   style: GoogleFonts.poppins(
-                      fontSize: 30, fontWeight: FontWeight.w900, color: Colors.white),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white),
                 ),
                 const SizedBox(height: 16),
-        
+
                 // Email Field
                 TextField(
                   controller: emailController,
@@ -96,10 +97,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-        
+
                 const SizedBox(height: 16),
-        
-        // Password Field
+
+                // Password Field
                 TextField(
                   controller: passController,
                   obscureText: true,
@@ -127,9 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-        
+
                 const SizedBox(height: 24),
-        
+
                 // Register Button
                 SizedBox(
                   width: double.infinity,
@@ -143,12 +144,20 @@ class _LoginPageState extends State<LoginPage> {
                             .signInWithEmailAndPassword(
                                 email: emailController.text,
                                 password: passController.text);
+
+                        print(
+                            "✅ User Logged In: ${credential.user?.email}"); // Debugging output
+
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => MyHome()));
                       } on FirebaseAuthException catch (e) {
                         setState(() {
                           isLoading = false;
                         });
+
+                        print(
+                            "❌ Firebase Auth Error: ${e.code}"); // Debugging output
+
                         if (e.code == 'user-not-found') {
                           print('No user found for that email.');
                         } else if (e.code == 'wrong-password') {
@@ -170,40 +179,44 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                   ),
                 ),
-                SizedBox(height: 5,),
-                Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Don't have an account?  " ,
-                    style: GoogleFonts.poppins(color: Colors.white),),
-                    InkWell(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Signup()));
-                        },
-                        child: Text(
-                          "Register",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
-                  ],
+                SizedBox(
+                  height: 5,
                 ),
-              ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account?  ",
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Signup()));
+                          },
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
                 SizedBox(
                   height: 9,
                 ),
-                Visibility(visible: isLoading, child: CircularProgressIndicator())
+                Visibility(
+                    visible: isLoading, child: CircularProgressIndicator())
               ],
             ),
           ),
         ),
-        ]
-      ),
+      ]),
     );
   }
 }
