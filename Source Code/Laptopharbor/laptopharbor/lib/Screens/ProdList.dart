@@ -31,6 +31,9 @@ class _ProdListingState extends State<ProdListing> {
   List<Map<String, dynamic>> products = [];
   List<Map<String, dynamic>> filteredProducts = [];
   List<Map<String, dynamic>> cartItems = [];
+  List<Map<String, dynamic>> wishlist =
+      []; // ✅ Define wishlist globally in your class
+
   Set<String> cartProductIds = {};
   Set<String> wishlistProductIds = {};
   bool isLoading = true;
@@ -97,12 +100,13 @@ class _ProdListingState extends State<ProdListing> {
 
   void _addToWishList(Map<String, dynamic> product) {
     setState(() {
-      wishlistProductIds.add(product['id']);
+      if (!wishlist.any((item) => item['id'] == product['id'])) {
+        wishlist.add(product); // ✅ Add the full product
+      }
+      wishlistProductIds.add(product['id']); // Keep track of IDs if needed
     });
 
-    if (widget.onAddToWishList != null) {
-      widget.onAddToWishList(product);
-    }
+    widget.onAddToWishList.call(product); // Call callback
 
     _showSnackBar('Added to wishlist!');
   }
@@ -112,9 +116,8 @@ class _ProdListingState extends State<ProdListing> {
       wishlistProductIds.remove(product['id']);
     });
 
-    if (widget.onRemoveFromWishList != null) {
-      widget.onRemoveFromWishList(product);
-    }
+    widget.onRemoveFromWishList
+        .call(product); // Use ?.call to prevent null issues
 
     _showSnackBar('Removed from wishlist!');
   }
@@ -142,6 +145,7 @@ class _ProdListingState extends State<ProdListing> {
         wishlistItems: [],
         cartItems: cartItems,
       ),
+      // Remove the Expanded widget inside the body of GridView.builder
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -169,223 +173,176 @@ class _ProdListingState extends State<ProdListing> {
                     ],
                   ),
                 ),
+                // This should no longer be wrapped in Expanded
                 Expanded(
-                  child: filteredProducts.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.shopping_bag_outlined,
-                                size: 80,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'No items found. Start exploring!',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  color: Colors.grey,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(15.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          MediaQuery.of(context).size.width > 600 ? 4 : 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio:
+                          MediaQuery.of(context).size.width > 600 ? 0.9 : 0.7,
+                    ),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      final isInCart = cartProductIds.contains(product['id']);
+                      final isInWishList =
+                          wishlistProductIds.contains(product['id']);
+
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(16)),
+                              child: Container(
+                                color: Colors.white,
+                                child: Image.network(
+                                  product['productImage'] ?? '',
+                                  height: 130,
+                                  width: double.infinity,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.broken_image,
+                                      size: 50,
+                                      color: Colors.black,
+                                    );
+                                  },
                                 ),
                               ),
-                            ],
-                          ),
-                        )
-                      : GridView.builder(
-                          padding: const EdgeInsets.all(15.0),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                            childAspectRatio: 0.7,
-                          ),
-                          itemCount: filteredProducts.length,
-                          itemBuilder: (context, index) {
-                            final product = filteredProducts[index];
-                            final isInCart =
-                                cartProductIds.contains(product['id']);
-                            final isInWishList =
-                                wishlistProductIds.contains(product['id']);
-
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 6,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 6.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(16)),
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Image.network(
-                                        product['productImage'] ?? '',
-                                        height: 180,
-                                        width: double.infinity,
-                                        fit: BoxFit.fitHeight,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return const Icon(
-                                            Icons.broken_image,
-                                            size: 50,
-                                            color: Color.fromARGB(255, 0, 0, 0),
-                                          );
-                                        },
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                        product['productName'] ?? 'No Name',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0, vertical: 6.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Text(
-                                              product['productName'] ??
-                                                  'No Name',
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Center(
-                                          child: Text(
-                                            "\PKR${product['productPrice'] ?? '0'}",
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.green,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 17),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 10.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // Wishlist Icon with solid background
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: isInWishList
-                                                  ? Colors.grey[700]
-                                                  : Colors.red,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  blurRadius: 4,
-                                                  spreadRadius: 1,
-                                                  offset: Offset(0, 2),
-                                                ),
-                                              ]),
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              FontAwesomeIcons.heart,
-                                              color: Colors.white,
-                                            ),
-                                            onPressed: () {
-                                              if (isInWishList) {
-                                                _removeFromWishList(product);
-                                              } else {
-                                                _addToWishList(product);
-                                              }
-                                            },
-                                          ),
-                                        ),
-
-                                        Center(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: isInCart
-                                                  ? Colors.grey[800]
-                                                  : Colors.green,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  blurRadius: 4,
-                                                  spreadRadius: 1,
-                                                  offset: Offset(0, 2),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Center(
-                                              child: IconButton(
-                                                icon: const Icon(
-                                                  FontAwesomeIcons.cartShopping,
-                                                  color: Colors.white,
-                                                  size: 21,
-                                                ),
-                                                onPressed: () {
-                                                  if (isInCart) {
-                                                    _removeFromCart(product);
-                                                  } else {
-                                                    _addToCart(product);
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.blue,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 4,
-                                                spreadRadius: 1,
-                                                offset: Offset(0, 2),
-                                              ),
-                                            ],
-                                          ),
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              FontAwesomeIcons.infoCircle,
-                                              color: Colors.white,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProductDetailsPage(
-                                                    productId: product['id'],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                                  const SizedBox(height: 4),
+                                  Center(
+                                    child: Text(
+                                      "\PKR${product['productPrice'] ?? '0'}",
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
                                     ),
                                   ),
                                 ],
                               ),
-                            );
-                          },
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Wishlist Button
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isInWishList
+                                          ? Colors.grey[700]
+                                          : Colors.red,
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        FontAwesomeIcons.heart,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        if (isInWishList) {
+                                          _removeFromWishList(product);
+                                        } else {
+                                          _addToWishList(product);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  // Cart Button
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isInCart
+                                          ? Colors.grey[800]
+                                          : Colors.green,
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        FontAwesomeIcons.cartShopping,
+                                        color: Colors.white,
+                                        size: 21,
+                                      ),
+                                      onPressed: () {
+                                        if (isInCart) {
+                                          _removeFromCart(product);
+                                        } else {
+                                          _addToCart(product);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  // Info Button
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.blue,
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        FontAwesomeIcons.infoCircle,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                WishListScreen(
+                                              wishList:
+                                                  wishlist, // ✅ Pass the full wishlist
+                                              // onWishListUpdate: (updatedList) {
+                                              //   setState(() {
+                                              //     wishlist = updatedList;
+                                              //   });
+                                              // },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

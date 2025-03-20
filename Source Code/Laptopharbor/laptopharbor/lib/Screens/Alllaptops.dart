@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:laptopharbor/Screens/MyAppbar.dart'; 
+import 'package:laptopharbor/Screens/MyAppbar.dart';
 
 class AllLaptopsPage extends StatefulWidget {
   const AllLaptopsPage({super.key});
@@ -29,17 +29,25 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
 
   Future<void> fetchProducts() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('products')
-          .get();
+      final querySnapshot =
+          await FirebaseFirestore.instance.collection('products').get();
       setState(() {
         products = querySnapshot.docs.map((doc) {
           final data = doc.data();
+
+          // print('Raw Data: $data'); // Debugging to check Firestore data
+
           return {
             'id': doc.id,
             'productName': data['productName'] ?? 'No Name',
             'productImage': data['productImage'] ?? '',
             'productPrice': _parsePrice(data['productPrice'] ?? '0.0'),
+
+            // 'trendproductCategory': data.containsKey('trendproductCategory')
+            //     ? (data['trendproductCategory'] is List
+            //         ? data['trendproductCategory'].join(', ')
+            //         : data['trendproductCategory'])
+            //     : 'Gaming', // Default to Gaming if missing
           };
         }).toList();
 
@@ -55,15 +63,14 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
 
   // Helper function to parse price strings to double
   double _parsePrice(String price) {
-    price = price.replaceAll(',', ''); 
-    return double.tryParse(price) ?? 0.0; 
+    price = price.replaceAll(',', '');
+    return double.tryParse(price) ?? 0.0;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -86,10 +93,14 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
                       : GridView.builder(
                           padding: const EdgeInsets.all(16.0),
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                (MediaQuery.of(context).size.width ~/ 250)
+                                    .clamp(2, 5),
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
+                            childAspectRatio:
+                                0.75, // Adjust this to control height
                           ),
                           itemCount: products.length,
                           itemBuilder: (context, index) {
@@ -109,9 +120,9 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
                                       color: Colors.white,
                                       child: Image.network(
                                         product['productImage'] ?? '',
-                                        height: 140,
+                                        height: 130,
                                         width: double.infinity,
-                                        fit: BoxFit.fitHeight,
+                                        fit: BoxFit.contain,
                                         errorBuilder:
                                             (context, error, stackTrace) {
                                           return const Icon(
@@ -150,13 +161,14 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
                                           ),
                                         ),
                                         Center(
-                                      child: Text(
-                                        'Brand: ${product['trendproductCategory'] ?? 'Unknown'}',
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color.fromARGB(255, 49, 102, 50)),
-                                      ),
-                                    ),
+                                          child: Text(
+                                            'Brand: ${product['trendproductCategory'] ?? 'Unknown'}',
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color.fromARGB(
+                                                    255, 49, 102, 50)),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
