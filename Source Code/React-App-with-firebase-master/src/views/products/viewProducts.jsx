@@ -187,7 +187,7 @@ const ViewProducts = () => {
                     <CTableHeaderCell>Image</CTableHeaderCell>
                     <CTableHeaderCell>Update</CTableHeaderCell>
                     <CTableHeaderCell>Delete</CTableHeaderCell>
-                    
+
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -261,6 +261,8 @@ const ViewProducts = () => {
                 value={editData.productPrice}
                 onChange={handleEditInputChange}
                 label="Product Price"
+                type="number" // Changed to number
+                step="1" // Restrict to integer values only
               />
               <CFormTextarea
                 name="productDescription"

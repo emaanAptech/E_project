@@ -50,9 +50,19 @@ const AddProducts = () => {
   }, []);
 
   // Handle input change
+  // Handle input change
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+
+    // If the input is for productPrice, only allow integer values
+    if (id === 'productPrice') {
+      // Allow only digits (integer input)
+      if (/^\d*$/.test(value)) {
+        setFormData({ ...formData, [id]: value });
+      }
+    } else {
+      setFormData({ ...formData, [id]: value });
+    }
   };
 
   // Handle file input change (convert image to Base64)
@@ -127,7 +137,7 @@ const AddProducts = () => {
               <div className="mb-3">
                 <CFormLabel htmlFor="productPrice">Product Price</CFormLabel>
                 <CFormInput
-                  type="text"
+                  type="number"
                   id="productPrice"
                   placeholder="Enter product price"
                   value={formData.productPrice}

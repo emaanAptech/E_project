@@ -51,8 +51,8 @@ class CategoryPage extends StatelessWidget {
                           selectedCategory:
                               category['categoryName'] ?? 'Unknown Category',
                           onAddToCart: (product) {},
-                          onAddToWishList: (product) {}, 
-                          onRemoveFromWishList: (product) {  },
+                          onAddToWishList: (product) {},
+                          onRemoveFromWishList: (product) {},
                         ),
                       ),
                     );
@@ -104,7 +104,9 @@ class ProductCard extends StatelessWidget {
                   const BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.network(
                 image,
-                fit: BoxFit.cover,
+                height: 150,
+                width: double.infinity,
+                fit: BoxFit.fill,
                 errorBuilder: (context, error, stackTrace) =>
                     const Icon(Icons.broken_image),
               ),
@@ -146,8 +148,10 @@ class ProductCard extends StatelessWidget {
               ),
               child: Text(
                 'See More',
-                style: GoogleFonts.poppins(fontSize: 14, color: Colors.white,
-                fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),

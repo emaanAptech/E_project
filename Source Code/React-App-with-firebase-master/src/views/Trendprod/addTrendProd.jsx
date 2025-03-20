@@ -148,7 +148,7 @@ const AddProducts = () => {
               <div className="mb-3">
                 <CFormLabel htmlFor="trendproductPrice">Product Price</CFormLabel>
                 <CFormInput
-                  type="text"
+                  type="number"
                   id="trendproductPrice"
                   placeholder="Enter product price"
                   value={formData.trendproductPrice}
@@ -192,9 +192,10 @@ const AddProducts = () => {
                   onChange={handleFileChange}
                   required
                 />
-              </div>
+              </div> &nbsp;
               <div className="mb-3">
                 <CFormLabel htmlFor="isTrending">Mark as Trending</CFormLabel>
+                &nbsp;
                 <input
                   type="checkbox"
                   id="isTrending"

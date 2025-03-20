@@ -11,9 +11,10 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
+  CButton,
 } from '@coreui/react'
 import { db } from '../../firebaseConfig/firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'
 
 const ViewCategory = () => {
   const [categories, setCategories] = useState([])
@@ -33,6 +34,19 @@ const ViewCategory = () => {
       setError('Failed to load categories.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDelete = async (categoryId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoc(doc(db, 'categories', categoryId))
+      setCategories(categories.filter(category => category.id !== categoryId))
+    } catch (err) {
+      console.error('Error deleting category:', err)
+      alert('Failed to delete category.')
     }
   }
 
@@ -63,6 +77,7 @@ const ViewCategory = () => {
                   <CTableHeaderCell>Category Name</CTableHeaderCell>
                   <CTableHeaderCell>Description</CTableHeaderCell>
                   <CTableHeaderCell>Image</CTableHeaderCell>
+                  <CTableHeaderCell>Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -81,6 +96,11 @@ const ViewCategory = () => {
                       ) : (
                         <p>No Image</p>
                       )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <CButton color="danger" size="sm" onClick={() => handleDelete(category.id)}>
+                        Delete
+                      </CButton>
                     </CTableDataCell>
                   </CTableRow>
                 ))}
