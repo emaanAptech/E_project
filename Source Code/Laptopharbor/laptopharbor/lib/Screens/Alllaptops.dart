@@ -35,18 +35,19 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
         products = querySnapshot.docs.map((doc) {
           final data = doc.data();
 
-          print('Raw Data: $data'); // Debugging to check Firestore data
+          // print('Raw Data: $data'); // Debugging to check Firestore data
 
           return {
             'id': doc.id,
             'productName': data['productName'] ?? 'No Name',
             'productImage': data['productImage'] ?? '',
             'productPrice': _parsePrice(data['productPrice'] ?? '0.0'),
-            'trendproductCategory': data.containsKey('trendproductCategory')
-                ? (data['trendproductCategory'] is List
-                    ? data['trendproductCategory'].join(', ')
-                    : data['trendproductCategory'])
-                : 'Gaming', // Default to Gaming if missing
+
+            // 'trendproductCategory': data.containsKey('trendproductCategory')
+            //     ? (data['trendproductCategory'] is List
+            //         ? data['trendproductCategory'].join(', ')
+            //         : data['trendproductCategory'])
+            //     : 'Gaming', // Default to Gaming if missing
           };
         }).toList();
 
@@ -92,10 +93,14 @@ class _AllLaptopsPageState extends State<AllLaptopsPage> {
                       : GridView.builder(
                           padding: const EdgeInsets.all(16.0),
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                (MediaQuery.of(context).size.width ~/ 250)
+                                    .clamp(2, 5),
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
+                            childAspectRatio:
+                                0.75, // Adjust this to control height
                           ),
                           itemCount: products.length,
                           itemBuilder: (context, index) {

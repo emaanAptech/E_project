@@ -16,7 +16,7 @@ import 'package:laptopharbor/Widgets/Carousel.dart';
 import 'package:laptopharbor/Widgets/Drawer.dart';
 
 class MyHome extends StatefulWidget {
-  MyHome({super.key});
+  const MyHome({super.key});
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -27,6 +27,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> cart = [];
   late TabController _tabController;
   final ScrollController _scrollController = ScrollController();
+  // ignore: unused_field
   double _scrollPosition = 0;
 
   bool isLoading = true;
@@ -82,27 +83,9 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Widget _buildAnimatedSection({
-    required Widget child,
-    required double startOffset,
-    required double endOffset,
-  }) {
-    bool isVisible =
-        _scrollPosition >= startOffset && _scrollPosition <= endOffset;
-
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 900),
-      opacity: isVisible ? 1.0 : 0.0,
-      child: Transform.translate(
-        offset: Offset(0, isVisible ? 0 : 50),
-        child: child,
-      ),
-    );
-  }
-
   Widget _buildTrendingProductsSection() {
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     } else if (errorMessage != null) {
       return Center(
         child: Text(
@@ -185,7 +168,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        SizedBox(height: 4.0),
+                        const SizedBox(height: 4.0),
                         Center(
                           child: Text(
                             'Brand: ${product['trendproductCategory'] ?? 'Unknown'}',
